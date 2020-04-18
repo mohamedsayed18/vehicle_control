@@ -14,7 +14,7 @@ y_data = []     # store xr
 # Create Model of the car
 car = Vehicle()
 # set the first point
-car.x, car.y, car.yaw = waypoints[0][0], waypoints[0][1], waypoints[0][2]
+car.x, car.y = waypoints[0][0], waypoints[0][1]
 
 # Pass the output to the model (Step)
 for point in waypoints:
