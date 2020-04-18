@@ -18,8 +18,9 @@ car.x, car.y, car.yaw = waypoints[0][0], waypoints[0][1], waypoints[0][2]
 
 # Pass the output to the model (Step)
 for point in waypoints:
+    throttle = car.get_throttle(point)  # Calculate the throttle
     steer = car.lateral_control(point)  # calculate the steer angle
-    car.step(0.5, steer)    # Give the car the throttle and steer
+    car.step(throttle, steer)    # Give the car the throttle and steer
     x_data.append(car.x)    # add x position to the list
     y_data.append(car.y)    # add y position to the list
 

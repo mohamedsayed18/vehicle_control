@@ -42,6 +42,12 @@ class Vehicle:
         self.w_e = 70
         self.w_e_dot = 0
 
+    def get_throttle(self, wp):
+        kp = 2   # Proportional gain
+        v_error = wp[2] - self.v
+        throttle_output = kp * v_error
+        return throttle_output
+
     def long_control(self, throttle):
         self.v += self.a * self.sample_time
         self.w_e += self.w_e_dot * self.sample_time
@@ -60,12 +66,6 @@ class Vehicle:
         self.w_e_dot = (t_e - self.GR * self.r_e + f_load) / self.J_e
 
     def step(self, throttle_output, steer_output):
-        """
-
-        :param throttle_output:
-        :param steer_output:
-        :return:
-        """
         # longitudinal to get update the v
         self.long_control(throttle_output)
 
@@ -78,14 +78,15 @@ class Vehicle:
         self.beta = np.arctan(self.lr * np.tan(self.delta) / self.l)  # beta
 
     def lateral_control(self, wp):
+        """calculate the steer angle"""
         kp_ld = 0.8
         min_ld = 10
 
         x_rear = self.x - self.l * np.cos(self.yaw) / 2
         y_rear = self.y - self.l * np.sin(self.yaw) / 2
-        l_d = 10  # look ahead distance # todo changed with max between two values
+        l_d = 10  # look ahead distance #
 
-        carrot = wp  # todo change with the required conditions
-        alpha = np.arctan2(carrot[1] - y_rear, carrot[0] - x_rear) - self.yaw     # todo check this equation
+        carrot = wp
+        alpha = np.arctan2(carrot[1] - y_rear, carrot[0] - x_rear) - self.yaw
         steer_output = np.arctan2((2*self.l*np.sin(alpha)),l_d)
         return steer_output
